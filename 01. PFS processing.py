@@ -9,6 +9,8 @@ import glob
 import re
 import time
 
+from dicts.pfs_dicts import state_loc
+
 # SELECT STATES AUTOMATICALLY INCLUDES NATIONAL GEO
 states = ['WA']
 
@@ -216,7 +218,8 @@ for file_name in pfs_files:
     gpci.dropna(subset=['MP GPCI'], inplace=True)
     
     # Merge on locality
-    loc_lookup = pd.read_excel(directory + r'\Inputs\Lookup tables\PFS locality and state.xlsx')
+    loc_lookup = pd.DataFrame.from_dict(state_loc, orient="index").reset_index()
+    loc_lookup.rename(columns={'index': 'Locality Name'}, inplace=True)
     gpci = pd.merge(gpci, loc_lookup, how='left', on='Locality Name')
     
     # Limit to selected states and localities

@@ -183,7 +183,7 @@ for file_name in dme_files:
     dme_file = dme_file.drop(columns=['MOD2','JURIS','CATG','CEILING','FLOOR'])
 
     # Rename and reorder columns
-    dme_file.rename(columns=lambda col: 'SHORTDESC' if col[:4] == 'DESC' else col, inplace=True)
+    dme_file = dme_file.rename(columns=lambda col: 'SHORTDESC' if col[:4] == 'DESC' else col)
     col = dme_file.pop('SHORTDESC')
     dme_file.insert(2,'SHORTDESC',col)
 
