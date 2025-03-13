@@ -12,7 +12,7 @@ import time
 from Runall import split_rates
 
 # Get current working directory from parentfolder of folder containing scripts
-directory = os.path.dirname(os.getcwd())
+directory = os.getcwd()
 
 # List of files to download
 # lab_files = ['08CLAB-b.zip','09CLAB.zip','10CLAB.zip','11CLAB.zip','Clab2011C.zip','12CLAB.zip','13CLAB.zip','14CLAB.zip','15CLAB.zip','16CLAB.zip','17CLAB.zip','18CLAB.zip','18CLABQ2.zip','18CLABQ3.zip','19CLABQ1.zip','19CLABQ3.zip','19CLABQ4.zip','20CLABQ1.zip','20CLABQ2.zip','20CLABQ3.zip','20CLABQ4.zip','21CLABQ1.zip','21CLABQ2.zip','21CLABQ3.zip','21CLABQ4.zip','22CLABQ1.zip','22CLABQ2.zip','22CLABQ3.zip','22CLABQ4.zip','23CLABQ1.zip','23CLABQ2.zip','23CLABQ3.zip','23CLABQ4.zip','24CLABQ1.zip', '24CLABQ2.zip','24CLABQ3.zip','24CLABQ4.zip','25CLABQ1.zip']

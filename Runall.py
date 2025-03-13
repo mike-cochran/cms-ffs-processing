@@ -12,7 +12,7 @@ import time
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
 # Get current working directory from parentfolder of folder containing scripts
-directory = os.path.dirname(os.getcwd())
+directory = os.getcwd()
 print(directory)
 
 # Create "Outputs" folder
@@ -108,15 +108,15 @@ def split_rates(df):
 #     except Exception as err:
 #         print(f"An error occurred: {err}")
 
-with open(os.path.join(directory, r'Scripts\01. PFS processing.py')) as file:
+with open(os.path.join(directory, r'01. PFS processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'Scripts\02. Drug processing.py')) as file:
+with open(os.path.join(directory, r'02. Drug processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'Scripts\03. Lab processing.py')) as file:
+with open(os.path.join(directory, r'03. Lab processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'Scripts\04. DME processing.py')) as file:
+with open(os.path.join(directory, r'04. DME processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'Scripts\05. ASC processing.py')) as file:
+with open(os.path.join(directory, r'05. ASC processing.py')) as file:
     exec(file.read())
 
 combine(directory, combined_pfs=combined_pfs, combined_asp=combined_asp, combined_lab=combined_lab, combined_dme=combined_dme, combined_asc=combined_asc)
