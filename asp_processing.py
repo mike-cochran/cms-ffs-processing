@@ -9,14 +9,14 @@ import glob
 import re
 import time
 
-from Runall import split_rates
+from _process_all_cms import split_rates
+from dicts.asp_dicts import asp_file_dict
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
-# List of files to download
-# asp_files = ['jan05aspbyhcpcsv6_033106.zip','apr05aspbyhcpcsv8_033106.zip','jul05aspbyhcpcs_032906.zip','oct05aspbyhcpcs033106v2.zip','Jan06pricing.zip','apr06pricing.zip','july06asp_hcpcs.zip','oct06asp_hcpcs.zip','Jan07ASPbyHCPCS_121707.zip','April07ASPbyHCPCS_121707.zip','July07ASPbyHCPCS_121707.zip','October07ASPbyHCPCS.zip','Jan08ASPbyHCPCS.zip','April08ASPbyHCPCS.zip','July2008ASPPricingFilebyHCPCS.zip','October2008ASPPricingFilebyHCPCS.zip','JAN_2009_ASP_Pricing_File_by_HCPCS.zip','April_2009_ASP_Pricing_File_by_HCPCS.zip','July_2009_ASP_Pricing_File.zip','October_2009_ASP_Pricing_File.zip','January_2010_ASP_Pricing_File.zip','April_2010_ASP_Pricing_File.zip','July_2010_ASP_Pricing_File.zip','October_2010_ASP_Pricing_File.zip','January2011_ASP_PricingFile.zip','April_2011_ASP_Pricing_File.zip','July_2011_ASP_Pricing_File.zip','Oct_2011_ASP_Pricing_File.zip','Jan_2012_ASP_Pricing_File.zip','April-2012-ASP-Pricing-file-revised030513.zip','July-2012-ASP-Pricing-File.zip','October-2012-ASP-Pricing-File.zip','Jan-2013-ASP-Pricing-File.zip','Apr-13-ASP-Pricing-file.zip','2013-July-ASP-Pricing-File.zip','2013-October-ASP-Pricing-File.zip','Jan-14-ASP-Pricing-File.zip','Apr-14-ASP-Pricing-File.zip','Jul-2014-ASP-Pricing-File.zip','2014-October-ASP-Pricing-File.zip','2015-January-ASP-Pricing-File.zip','2015-April-ASP-Pricing-File.zip','2015-July-ASP-Pricing-File.zip','2015-October-ASP-Pricing-File.zip','2016-January-ASP-Pricing-File.zip','2016-April-ASP-Pricing-File.zip','2016-July-ASP-Pricing-File.zip','2016-October-ASP-Pricing-File.zip','2017-January-ASP-Pricing-Files.zip','2017-April-ASP-Pricing.zip','2017-July-ASP-Pricing-File.zip','2017-October-ASP-Pricing-File.zip','2018-January-ASP-Pricing-File.zip','2018-April-ASP-Pricing-File.zip','2018-July-ASP-Pricing-File.zip','2018-Oct-ASP-Pricing-File.zip','2019-January-ASP-Pricing-File.zip','April-2019-ASP-Pricing-File.zip','2019-July-ASP-Pricing-File.zip','2019-Oct-ASP-Pricing-File.zip','january-2020-asp-pricing-file.zip','april-2020-asp-pricing-file.zip','july-2020-asp-pricing-file-updated-06012020.zip','october-2020-asp-pricing-file.zip','january-2021-asp-pricing-file.zip','april-2021-asp-pricing-file.zip','july-2021-asp-pricing-file.zip','october-2021-asp-pricing-file.zip','january-2022-asp-pricing-file.zip','april-2022-asp-pricing-file.zip','july-2022-asp-pricing-file.zip','october-2022-asp-pricing-file.zip','january-2023-asp-pricing-file.zip','april-2023-asp-pricing-file.zip','july-2023-asp-pricing-file.zip','october-2023-asp-pricing-file.zip','january-2024-asp-pricing-file.zip','april-2024-asp-pricing-file.zip','july-2024-asp-pricing-file.zip','october-2024-asp-pricing-file.zip','january-2025-asp-pricing-file-12/19/24-final-file.zip']
-asp_files = ['january-2025-asp-pricing-file-12/19/24-final-file.zip']
+# List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
+asp_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 # Regular expression to match the year
 year_pattern = re.compile(r'(20\d{2}|\d{2})')
@@ -73,7 +73,8 @@ def download_and_unzip_file(file, save_path):
         print(f"An error occurred: {err}")
 
 # Loop through the list of files and download and unzip each one
-for file_name in asp_files:
+for file in asp_files:
+    file_name = asp_file_dict[file]
     folder_name = file_name[:-4].replace("/","_")
     
     # Create year object
@@ -94,7 +95,8 @@ for file_name in asp_files:
 combined_asp = pd.DataFrame()
 
 # Process each drug file and combine
-for file_name in asp_files:
+for file in asp_files:
+    file_name = asp_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4].replace("/","_")
     

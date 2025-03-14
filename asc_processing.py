@@ -9,14 +9,15 @@ import glob
 import re
 import time
 
-from Runall import split_rates
+from _process_all_cms import split_rates
+from dicts.asc_dicts import asc_file_dict
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
-# List of files to download
-# asc_files = ['ascpuf01.zip','ascpuf2002.zip','ascpuf2003.zip','ascpuf2004.zip','ascpuf2005.zip','ascpuf2006.zip','07asc_hcpcs.zip','08ASC.zip','09ASC.zip','2010_ASC_Approved_HCPCS_Codes_and_Payment_Rates.zip','2011-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2012-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2013-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2014-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2015-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2016-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2017-ASC-Approved-HCPCS-Codes-and-Payment-Rates.zip','2018-Jan-ASC-Addenda-V2.zip','April-2018-ASC-Approved-HCPCS-Code-and-Payment-Rates.zip','2018-Jul-ASC-Addenda.zip','2018-Oct-ASC-Addenda.zip','2019-Jan-ASC-Addenda-Corrections.zip','2019-Apr-ASC-Addenda-Corrections.zip','2019-Jul-ASC-Addenda.zip','2019-10-15-ASC-Addenda-Corrections.zip','January-2020-ASC-Approved-HCPCS-Code-and-Payment-Rates.zip','april-2020-asc-approved-hcpcs-code-and-payment-rates-updated-04092020.zip','july-2020-asc-approved-hcpcs-code-and-payment-rates.zip','october-2020-asc-approved-hcpcs-code-and-payment-rates.zip','2021-January-ASC-Addenda.zip','2021-April-ASC-Addenda.zip','2021-July-ASC-Addenda.zip','2021-Oct-ASC-Addenda.zip','2022-January-ASC-Addenda.zip','2022-April-ASC-Addenda.zip','2022-july-asc-addenda.zip','october-2022-asc-approved-hcpcs-code-and-payment-rates-updated-10182022.zip','january-2023-asc-approved-hcpcs-code-and-payment-rates.zip','april-2023-asc-approved-hcpcs-code-and-payment-rates.zip','july-2023-asc-approved-hcpcs-code-and-payment-rates.zip','october-2023-asc-approved-hcpcs-code-and-payment-rates.zip','january-2024-asc-approved-hcpcs-code-and-payment-rates.zip','march-9-2024-asc-approved-hcpcs-code-and-payment-rates.zip','april-2024-asc-approved-hcpcs-code-and-payment-rates.zip','july-2024-asc-approved-hcpcs-code-and-payment-rates.zip','october-2024-asc-approved-hcpcs-code-and-payment-rates-updated-09/24/2024.zip','january-2025-asc-approved-hcpcs-code-and-payment-rates.zip']
-asc_files = ['january-2025-asc-approved-hcpcs-code-and-payment-rates.zip']
+# List ASC schedules to include. Files are annual starting in 2001 (format is YYYY)
+# and quarterly starting at 2018Q1 (format is YYYYQ).
+asc_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 # Regular expression to match the year
 year_pattern = re.compile(r'(20\d{2}|\d{2})')
@@ -73,7 +74,8 @@ def download_and_unzip_file(file, save_path):
         print(f"An error occurred: {err}")
 
 # Loop through the list of files and download and unzip each one
-for file_name in asc_files:
+for file in asc_files:
+    file_name = asc_file_dict[file]
     folder_name = file_name[:-4]
     
     # Create year object
@@ -144,7 +146,8 @@ def process_data(df, year, file_name, rate_col_pattern):
     return df
 
 # Process each ASC file and combine
-for file_name in asc_files:
+for file in asc_files:
+    file_name = asc_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4]
     

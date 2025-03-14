@@ -10,20 +10,22 @@ import re
 import time
 
 from dicts.pfs_dicts import state_loc
+from dicts.pfs_dicts import pfs_file_dict
 
 # SELECT STATES AUTOMATICALLY INCLUDES NATIONAL GEO
-states = ['WA']
+states = ['']
 
 # SELECT SPECIFIC GEOS WITHIN STATES
 # localities = ['ARIZONA','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES/ORANGE CNTY)','RIVERSIDE-SAN BERNARDINO-ONTARIO','SAN DIEGO-CHULA VISTA-CARLSBAD','SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)','COLORADO','NEW MEXICO','NEVADA','REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
-localities = ['REST OF OREGON', 'PORTLAND']
+localities = ['']
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
-# List of files to download
-# pfs_files = ['rvu03_d.zip','rvu03_a.zip','rvu04_a.zip','rvu04_b.zip','rvu04_c.zip','rvu04_d.zip','rvu05_a.zip','rvu05a_r.zip','rvu05_b.zip','rvu05_c.zip','prrev05d.zip','rvu05_e.zip','rvu06a.zip','rvu06ar.zip','rvu06ar2.zip','rvu06b.zip','rvu06c.zip','rvu06d.zip','rvu07a2.zip','rvu07a3.zip','rvu07a4.zip','rvu07b.zip','rvu07c.zip','rvu07d.zip','rvu08ar.zip','rvu08ab.zip','rvu08c.zip','rvu08d.zip','rvu09a.zip','rvu09ar.zip','rvu09b.zip','rvu09c.zip','rvu10ar1.zip','rvu10c_pct0.zip','rvu10c_pct22.zip','rvu10d_pct0.zip','rvu10d_pct22.zip','rvu11a.zip','rvu11ar.zip','rvu11b_2.zip','rvu11c.zip','rvu11d.zip','rvu12a.zip','rvu12ar.zip','rvu12b-.zip','rvu12c.zip','rvu12d.zip','rvu12m.zip','rvu13a.zip','rvu13ar.zip','rvu13b.zip','rvu13c.zip','rvu13d.zip','rvu14a.zip','rvu14b.zip','rvu14c.zip','rvu14d.zip','rvu15a.zip','rvu15b.zip','rvu15c.zip','rvu15d.zip','rvu16a.zip','rvu16b.zip','rvu16c.zip','rvu16d.zip','rvu17a.zip','rvu17b.zip','rvu17c.zip','rvu17d.zip','rvu18a.zip','rvu18ar.zip','rvu18ar1.zip','rvu18b.zip','rvu18c1.zip','rvu18d.zip','rvu19a.zip','rvu19b.zip','rvu19c.zip','rvu19d.zip','rvu20a-updated-01312020.zip','rvu20b.zip','rvu20c.zip','rvu20d.zip','rvu21a-updated-01052021.zip','rvu21b.zip','rvu21c.zip','rvu21d.zip','rvu22a.zip','rvu22b.zip','rvu22c.zip','rvu22d.zip','rvu23a.zip','rvu23b.zip','rvu23c.zip','rvu23d.zip','rvu24a.zip','rvu24ar.zip','rvu24b-updated-03/18/2024.zip','rvu24c.zip','rvu24d.zip','rvu25a-updated-01/10/2025.zip']
-pfs_files = ['rvu25a-updated-01/10/2025.zip']
+# List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
+# There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
+# If a previous rate schedule to a revision is desired, use the format YYYYQ_p[1-9]
+pfs_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 # Regular expression to match the year
 year_pattern = re.compile(r'(20\d{2}|\d{2})')
@@ -107,7 +109,8 @@ def download_and_unzip_file(file, save_path, year, new_url_year, base_url, new_a
 # )
 
 # Loop through the list of files and download and unzip each one
-for file_name in pfs_files:
+for file in pfs_files:
+    file_name = pfs_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4].replace("/", "_")
     
@@ -139,7 +142,8 @@ for file_name in pfs_files:
 combined_pfs = pd.DataFrame()
 
 # Process each PFS file and combine
-for file_name in pfs_files:
+for file in pfs_files:
+    file_name = pfs_file_dict[file]
     file_name = file_name.replace("/","_")
     folder_name = file_name[:-4]
     print(file_name)

@@ -9,14 +9,15 @@ import glob
 import re
 import time
 
-from Runall import split_rates
+from _process_all_cms import split_rates
+from dicts.lab_dicts import lab_file_dict
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
-# List of files to download
-# lab_files = ['08CLAB-b.zip','09CLAB.zip','10CLAB.zip','11CLAB.zip','Clab2011C.zip','12CLAB.zip','13CLAB.zip','14CLAB.zip','15CLAB.zip','16CLAB.zip','17CLAB.zip','18CLAB.zip','18CLABQ2.zip','18CLABQ3.zip','19CLABQ1.zip','19CLABQ3.zip','19CLABQ4.zip','20CLABQ1.zip','20CLABQ2.zip','20CLABQ3.zip','20CLABQ4.zip','21CLABQ1.zip','21CLABQ2.zip','21CLABQ3.zip','21CLABQ4.zip','22CLABQ1.zip','22CLABQ2.zip','22CLABQ3.zip','22CLABQ4.zip','23CLABQ1.zip','23CLABQ2.zip','23CLABQ3.zip','23CLABQ4.zip','24CLABQ1.zip', '24CLABQ2.zip','24CLABQ3.zip','24CLABQ4.zip','25CLABQ1.zip']
-lab_files = ['25CLABQ1.zip']
+# List CLab schedules to include. Files are annual starting in 2008 (format is YYYY)
+# and quarterly starting at 2018Q1 (format is YYYYQ).
+lab_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 #TODO: '10CLABAPR.zip' NEED TO FIGURE OUT HOW TO UNZIP AND PROCESS THIS DATA
 
@@ -72,7 +73,8 @@ def download_and_unzip_file(file, save_path):
         print(f"An error occurred: {err}")
 
 # Loop through the list of files and download and unzip each one
-for file_name in lab_files:
+for file in lab_files:
+    file_name = lab_file_dict[file]
     folder_name = file_name[:-4]
     if file_name[:1] == 'C':
         year = 2000
@@ -87,7 +89,8 @@ for file_name in lab_files:
 combined_lab = pd.DataFrame()
 
 # Process each file and combine
-for file_name in lab_files:
+for file in lab_files:
+    file_name = lab_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4]
     

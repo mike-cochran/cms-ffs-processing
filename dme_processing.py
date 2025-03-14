@@ -11,7 +11,8 @@ import glob
 import re
 import time
 
-from Runall import split_rates
+from _process_all_cms import split_rates
+from dicts.dme_dicts import dme_file_dict
 
 # TODO: ADD DME PEN PROCESSING. SCRIPT ONLY COVERS DME POS
 
@@ -21,9 +22,10 @@ geos = ['OR (NR)']
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
-# List of files to download
-# dme_files = ['dme98_d.zip','dme99_c.zip','dme00_b.zip','dme00_c.zip','dme01_a.zip','d01jan_c.zip','d01july_c.zip','d02jan_a.zip','d02jan_c.zip','d02jan_d.zip','d03_jan_r.zip','d03_jan_b.zip','d03_jan_c.zip','d03_jan_d.zip','d04_jan.zip','d04_janb.zip','d04_janc.zip','d04_jand.zip','d05_jan_r.zip','d05_janr2.zip','d05_jand.zip','d05_jan_b.zip','d05_jan_b3.zip','d05_jan_c.zip','d05_jan_d.zip','d06_jan.zip','d06_jan_r.zip','d06_jan_b.zip','d06_jan_c2.zip','d06_jan_d.zip','d06_jan_g.zip','d06_jan_h.zip','d06_jan_i.zip','d07_jan.zip','d07_jan_r.zip','d07_jan_c.zip','d08_janr2.zip','d08_jan_c.zip','d09_janr.zip', 'd09_jan_c.zip','d10_janr.zip','dme10_c.zip','2010dmev2.zip','dme10_oct.zip','dme11_a.zip','dmepos2011_-l3660_l3670_l3675_pricing.zip','dme11_c.zip','dme12_a.zip','dme12_c.zip','dme13-a.zip','dme13_b.zip','dme13-c-file.zip','dme14-a.zip','dme14-b.zip','dme14-c.zip','dme15-a.zip','dme15-c.zip','dme15-d.zip','dme16-a.zip','dme16-b.zip','dme16-c.zip','dme16-d.zip','dme17-a.zip','dme17-b.z8ip','dme17-c.zip','dme17-d.zip','dme18-a.zip','dme18-b.zip','dme18-c.zip','dme18-d.zip','dme18-ifc.zip','dme19-a.zip','dme19-b.zip','dme19-c.zip','dme19-d.zip','dme20.zip','dme20-b.zip','dme20-c.zip','dme20-d.zip','dme20-cares.zip','dme21.zip','dme-21ar.zip','dme21-b.zip','dme21-d.zip','dme22.zip','dme22-b-posted-031522.zip','dme22c-posted-061722.zip','dme22-d.zip','dme22-r.zip','dme23-updated-12192022.zip','dme23-b.zip','dme23c.zip','dme23d.zip','dme24.zip','dme24-b.zip','dme24-c.zip','dme24-d.zip','dme25.zip']
-dme_files = ['dme25.zip']
+# List DME schedules to include. Files are quarterly starting at 1998Q1. Format is YYYYQ.
+# There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
+# If a previous rate schedule to a revision is desired, use the format YYYYQ_p[1-9]
+dme_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 # Need special processing for 'dme-l-code-update-file.zip' effective 1/1/2013
 
@@ -90,7 +92,8 @@ def download_and_unzip_file(file, save_path):
         print(f"An error occurred: {err}")
 
 # Loop through the list of files and download and unzip each one
-for file_name in dme_files:
+for file in dme_files:
+    file_name = dme_file_dict[file]
     folder_name = file_name[:-4]
     
     # Create year object
@@ -112,7 +115,8 @@ for file_name in dme_files:
 combined_dme = pd.DataFrame()
 
 # Process each file and combine
-for file_name in dme_files:
+for file in dme_files:
+    file_name = dme_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4]
     

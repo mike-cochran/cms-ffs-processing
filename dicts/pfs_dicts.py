@@ -1,4 +1,106 @@
-
+# File name dictionary
+pfs_file_dict = {'2003Q1': 'rvu03_a.zip',
+                 '2003Q4': 'rvu03_d.zip',
+                 '2004Q1': 'rvu04_a.zip',
+                 '2004Q2': 'rvu04_b.zip',
+                 '2004Q3': 'rvu04_c.zip',
+                 '2004Q4': 'rvu04_d.zip',
+                 '2005Q1_p1': 'rvu05_a.zip',  # 2005Q1 prior to revision
+                 '2005Q1': 'rvu05a_r.zip',  # 2005Q1 revised
+                 '2005Q2': 'rvu05_b.zip',
+                 '2005Q3': 'rvu05_c.zip',
+                 '2005Q4_p1': 'prrev05d.zip',  # 2005Q4 prior to revision
+                 '2005Q4': 'rvu05_e.zip',  # 2005Q4 revised
+                 '2006Q1_p2': 'rvu06a.zip',  # 2006Q1 prior to revision
+                 '2006Q1_p1': 'rvu06ar.zip',  # 2006Q1 previous revision
+                 '2006Q1': 'rvu06ar2.zip',  # 2006Q1 final revision
+                 '2006Q2': 'rvu06b.zip',
+                 '2006Q3': 'rvu06c.zip',
+                 '2006Q4': 'rvu06d.zip',
+                 '2007Q1_p2': 'rvu07a2.zip',  # 2007Q1 prior to revision
+                 '2007Q1_p1': 'rvu07a3.zip',  # 2007Q1 previous revision
+                 '2007Q1': 'rvu07a4.zip',  # 2007Q1 final revision
+                 '2007Q2': 'rvu07b.zip',
+                 '2007Q3': 'rvu07c.zip',
+                 '2007Q4': 'rvu07d.zip',
+                 '2008Q1': 'rvu08ar.zip',
+                 '2008Q2': 'rvu08ab.zip',  # Physician Fee Schedule has been revised for the April 2008, despite confusing name
+                 '2008Q3': 'rvu08c.zip',
+                 '2008Q4': 'rvu08d.zip',
+                 '2009Q1_p1': 'rvu09a.zip',  # 2009Q1 prior to revision
+                 '2009Q1': 'rvu09ar.zip',  # 2009Q1 revised
+                 '2009Q2': 'rvu09b.zip',
+                 '2009Q3': 'rvu09c.zip',
+                 '2010Q1': 'rvu10ar1.zip',
+                 '2010Q3_p1': 'rvu10c_pct0.zip',  # Prior to 2.2% revision from 2010 legislation
+                 '2010Q3': 'rvu10c_pct22.zip',  # After 2.2% rate adjustment from 2010 legislation
+                 '2010Q4_p1': 'rvu10d_pct0.zip',  # Prior to 2.2% revision from 2010 legislation
+                 '2010Q4': 'rvu10d_pct22.zip',  # After 2.2% rate adjustment from 2010 legislation
+                 '2011Q1_p1': 'rvu11a.zip',  # 2011Q1 prior to revision
+                 '2011Q1': 'rvu11ar.zip',  # 2011Q1 prior to revision
+                 '2011Q2': 'rvu11b_2.zip',
+                 '2011Q3': 'rvu11c.zip',
+                 '2011Q4': 'rvu11d.zip',
+                 '2012Q1_p1': 'rvu12a.zip',  # 2012Q1 prior to revision
+                 '2012Q1': 'rvu12ar.zip',  # 2012Q1 revised for Jan. - Feb.
+                 '2012Q1_march': 'rvu12m.zip',  # 2012Q1 revised for March
+                 '2012Q2': 'rvu12b-.zip',
+                 '2012Q3': 'rvu12c.zip',
+                 '2012Q4': 'rvu12d.zip',
+                 '2013Q1_p1': 'rvu13a.zip',
+                 '2013Q1': 'rvu13ar.zip',
+                 '2013Q2': 'rvu13b.zip',
+                 '2013Q3': 'rvu13c.zip',
+                 '2013Q4': 'rvu13d.zip',
+                 '2014Q1': 'rvu14a.zip',
+                 '2014Q2': 'rvu14b.zip',
+                 '2014Q3': 'rvu14c.zip',
+                 '2014Q4': 'rvu14d.zip',
+                 '2015Q1': 'rvu15a.zip',
+                 '2015Q2': 'rvu15b.zip',
+                 '2015Q3': 'rvu15c.zip',
+                 '2015Q4': 'rvu15d.zip',
+                 '2016Q1': 'rvu16a.zip',
+                 '2016Q2': 'rvu16b.zip',
+                 '2016Q3': 'rvu16c.zip',
+                 '2016Q4': 'rvu16d.zip',
+                 '2017Q1': 'rvu17a.zip',
+                 '2017Q2': 'rvu17b.zip',
+                 '2017Q3': 'rvu17c.zip',
+                 '2017Q4': 'rvu17d.zip',
+                 '2018Q1_p2': 'rvu18a.zip',  # 2018Q1 prior to revisions
+                 '2018Q1_p1': 'rvu18ar.zip',  # 2018Q1 revision incorporates changes from SUSTAIN Care Act
+                 '2018Q1': 'rvu18ar1.zip',  # 2018Q1 final revision, includes revised Anesthesia Conversion Factors for 2018
+                 '2018Q2': 'rvu18b.zip',
+                 '2018Q3': 'rvu18c1.zip',
+                 '2018Q4': 'rvu18d.zip',
+                 '2019Q1': 'rvu19a.zip',
+                 '2019Q2': 'rvu19b.zip',
+                 '2019Q3': 'rvu19c.zip',
+                 '2019Q4': 'rvu19d.zip',
+                 '2020Q1': 'rvu20a-updated-01312020.zip',
+                 '2020Q2': 'rvu20b.zip',
+                 '2020Q3': 'rvu20c.zip',
+                 '2020Q4': 'rvu20d.zip',
+                 '2021Q1': 'rvu21a-updated-01052021.zip',
+                 '2021Q2': 'rvu21b.zip',
+                 '2021Q3': 'rvu21c.zip',
+                 '2021Q4': 'rvu21d.zip',
+                 '2022Q1': 'rvu22a.zip',
+                 '2022Q2': 'rvu22b.zip',
+                 '2022Q3': 'rvu22c.zip',
+                 '2022Q4': 'rvu22d.zip',
+                 '2023Q1': 'rvu23a.zip',
+                 '2023Q2': 'rvu23b.zip',
+                 '2023Q3': 'rvu23c.zip',
+                 '2023Q4': 'rvu23d.zip',
+                 '2024Q1_p1': 'rvu24a.zip',  # 2024Q1 rates for 1/1/24, through 3/8/24, the PFS CF is $32.7442
+                 '2024Q1': 'rvu24ar.zip',  # 2024Q1 updated CF to $33.2875
+                 '2024Q2': 'rvu24b-updated-03/18/2024.zip',
+                 '2024Q3': 'rvu24c.zip',
+                 '2024Q4': 'rvu24d.zip',
+                 '2025Q1': 'rvu25a-updated-01/10/2025.zip'
+                 }
 
 # State and loc dictionary for PFS locality standardization
 state_loc = {'2ALASKA': {'State': 'AK', 'Std Locality Name': 'ALASKA'}

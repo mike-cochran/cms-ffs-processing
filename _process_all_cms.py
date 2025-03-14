@@ -108,15 +108,15 @@ def split_rates(df):
 #     except Exception as err:
 #         print(f"An error occurred: {err}")
 
-with open(os.path.join(directory, r'01. PFS processing.py')) as file:
+with open(os.path.join(directory, r'pfs_processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'02. Drug processing.py')) as file:
+with open(os.path.join(directory, r'asp_processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'03. Lab processing.py')) as file:
+with open(os.path.join(directory, r'lab_processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'04. DME processing.py')) as file:
+with open(os.path.join(directory, r'dme_processing.py')) as file:
     exec(file.read())
-with open(os.path.join(directory, r'05. ASC processing.py')) as file:
+with open(os.path.join(directory, r'asc_processing.py')) as file:
     exec(file.read())
 
 combine(directory, combined_pfs=combined_pfs, combined_asp=combined_asp, combined_lab=combined_lab, combined_dme=combined_dme, combined_asc=combined_asc)
