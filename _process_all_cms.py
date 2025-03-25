@@ -1,12 +1,5 @@
 # Set up libraries
-import pandas as pd
-import numpy as np
-import requests
-import zipfile
 import os
-import glob
-import re
-import time
 
 # Set current working directory to the directory containing the scripts being executed
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
@@ -20,12 +13,6 @@ os.makedirs(os.path.join(directory,'Outputs'), exist_ok=True)
 
 # Import functions
 from combine_data import combine
-
-# Select date range (inclusive range)
-start_yr = 2023
-end_yr = 2024
-
-# SETUP FUNCTIONS
 
 # Function to create standard add on columns
 def add_std_columns(df):
@@ -45,7 +32,7 @@ def split_rates(df):
 # def download_and_unzip_file(file, save_path, year, new_url_year, base_url, new_accept, old_accept):
 #     """
 #     Downloads and unzips a file from the specified URL.
-    
+#
 #     Parameters:
 #     - file: The name of the file to download.
 #     - save_path: The directory to save the file.
@@ -67,14 +54,14 @@ def split_rates(df):
 #                 url = base_url + file + '?agree=yes&next=Accept'
 #             else:
 #                 url = base_url + file
-                
+#
 #         # Send the HTTP request to download the file
 #         print(url)
 #         response = requests.get(url)
 #         response.raise_for_status()
 #         # Define the complete path including the file name
 #         complete_save_path = os.path.join(save_path, file.replace("/","_"))
-        
+#
 #         # Open the specified file path in binary write mode and save the content
 #         if os.path.exists(complete_save_path):
 #             print(f"File already exists at {complete_save_path}")
@@ -82,7 +69,7 @@ def split_rates(df):
 #             with open(complete_save_path, 'wb') as file:
 #                 file.write(response.content)
 #             print(f"File successfully downloaded and saved to {complete_save_path}")
-            
+#
 #         # Define the extraction path
 #         extract_path = save_path
 #         # Check if the zip file has already been unzipped
@@ -94,7 +81,7 @@ def split_rates(df):
 #             if non_zip_files_exist:
 #                 print(f"Files already extracted to {extract_path}")
 #                 return
-            
+#
 #         # Check if the file is a zip file
 #         if zipfile.is_zipfile(complete_save_path):
 #             with zipfile.ZipFile(complete_save_path, 'r') as zip_ref:
@@ -102,7 +89,7 @@ def split_rates(df):
 #                 print(f"File successfully unzipped to {extract_path}")
 #         else:
 #             print(f"{complete_save_path} is not a zip file")
-            
+#
 #     except requests.exceptions.HTTPError as http_err:
 #         print(f"HTTP error occurred: {http_err}")
 #     except Exception as err:

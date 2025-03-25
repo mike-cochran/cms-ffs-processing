@@ -1,7 +1,6 @@
 ## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS DME FILES AND COMBINE THEM INTO ONE FILE ##
 
 import pandas as pd
-import numpy as np
 import requests
 import zipfile
 import os
@@ -9,22 +8,21 @@ import contextlib
 import io
 import glob
 import re
-import time
 
 from _process_all_cms import split_rates
-from dicts.dme_dicts import dme_file_dict
+from Dicts.dme_dicts import dme_file_dict
 
 # TODO: ADD DME PEN PROCESSING. SCRIPT ONLY COVERS DME POS
 
 # SELECT GEOGRAPHIES TO INCLUDE IN OUTPUT FILE; pre-2016 geographies do not have separate rates for NR and R
-geos = ['OR (NR)']
+geos = ['WA (NR)']
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
 
 # List DME schedules to include. Files are quarterly starting at 1998Q1. Format is YYYYQ.
 # There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
-# If a previous rate schedule to a revision is desired, use the format YYYYQ_p[1-9]
+# If a previous rate schedule to a revision is desired, use the format YYYYQ_[1-9]
 dme_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
 
 # Need special processing for 'dme-l-code-update-file.zip' effective 1/1/2013
@@ -119,7 +117,7 @@ for file in dme_files:
     file_name = dme_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4]
-    
+
     # Create year object
     match = year_pattern.search(file_name)
     if match:
@@ -130,7 +128,7 @@ for file in dme_files:
             year = '19' + year
         year = int(year)
     print(year)
-    
+
     # Get POS file name and check if it exists
     dme_csvs = glob.glob(directory + fr'\Inputs\DME\{year}\{folder_name}\*.csv')
     if year >= 2010: file = [dmeposcsv for dmeposcsv in dme_csvs if os.path.getsize(dmeposcsv) > 1000 * 1024]  # 1,000 KB = 1,000 * 1024 bytes
@@ -138,7 +136,7 @@ for file in dme_files:
     if len(file) == 0:
         print(f"POS file not found for {folder_name}")
         continue
-    
+
     # Get the effective date of the file
     csv_file_name = os.path.basename(file[0])
     if year < 2010:
@@ -147,7 +145,7 @@ for file in dme_files:
         elif "_c" in file_name: eff_date = "July 1 " + str(year)
         elif "_d" in file_name: eff_date = "October 1 " + str(year)
         else: eff_date = "January 1 " + str(year)
-        
+
         if file_name == 'd01jan_c.zip': eff_date = "January 1 " + str(year) # Override the default date based on the zip file name, CMS website specifies rates are eff. 1/1/2001
         if file_name == 'd06_jan_g.zip': eff_date = "November 15 " + str(year) # To deal with unique file in 2006
         eff_date = pd.to_datetime(eff_date, format='%B %d %Y')
@@ -180,7 +178,6 @@ for file in dme_files:
 
     # Combine both mod columns into a single column
     dme_file.columns = dme_file.columns.str.upper()
-    print(dme_file)
     dme_file['MOD'] = dme_file['MOD'] + dme_file['MOD2']
 
     # Remove extra columns
@@ -201,13 +198,13 @@ for file in dme_files:
     # Create YEAR and EFF_DATE column
     dme_file.insert(0,'YEAR',year)
     dme_file.insert(1,'EFF_DATE',eff_date)
-    
+
     # Create column for file name
     dme_file['FILE_NAME'] = csv_file_name
-    
+
     # Create combined ASP df
     combined_dme = pd.concat([combined_dme, dme_file], ignore_index=True)
-    
+
 # Convert to NP datetime format
 combined_dme['EFF_DATE'] = combined_dme['EFF_DATE']
 combined_dme.insert(0, 'CMS SCHEDULE', '4. DME')
@@ -216,7 +213,6 @@ split_rates(combined_dme)
 
 # Save combined reults
 combined_dme.to_csv(directory + r'\Outputs\Combined DME.csv', index=False)
-print(combined_dme)
 
 
 # EOF

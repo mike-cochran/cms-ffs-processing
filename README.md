@@ -11,3 +11,4 @@ The code this set up to download and process the five different FFS rate schedul
   1. Clean up file lists and replace with dictionaries
   2. Look into making individual processing scripts into functions
   3. Add DME PEN processing
+  4. Process ASC files pre-2006

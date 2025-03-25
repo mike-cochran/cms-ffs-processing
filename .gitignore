@@ -2,3 +2,11 @@
 /Outputs
 /Inputs
 /__pycache__
+*.xml
+*.xml
+*.iml
+*.pyc
+*.xml
+*.pyc
+dicts/__pycache__/asp_dicts.cpython-312.pyc
+dicts/__pycache__/pfs_dicts.cpython-312.pyc

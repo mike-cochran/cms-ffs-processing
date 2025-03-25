@@ -1,16 +1,15 @@
 ## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS ASC FILES AND COMBINE THEM INTO ONE FILE ##
 
 import pandas as pd
-import numpy as np
 import requests
 import zipfile
 import os
 import glob
 import re
-import time
 
 from _process_all_cms import split_rates
-from dicts.asc_dicts import asc_file_dict
+from Dicts.asc_dicts import asc_file_dict
+from custom_exceptions import InvalidDateRange
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
@@ -23,8 +22,8 @@ asc_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1
 year_pattern = re.compile(r'(20\d{2}|\d{2})')
 eff_date_pattern = re.compile(r'(\b[a-zA-Z][a-zA-Z][a-zA-Z]+\s\d{4})|(\b\w+\s\d{1,2},\s\d{4})|(\b\w+\sCY\s\d{4}\b)|(\bCY\s\d{4}\b)')
 
-
-# Create function to download and unzip ASC files from CMS website
+#
+# # Create function to download and unzip ASC files from CMS website
 def download_and_unzip_file(file, save_path):
     try:
         # Send a HTTP request to the specified URL
@@ -35,10 +34,10 @@ def download_and_unzip_file(file, save_path):
 
         # Raise an HTTPError if the HTTP request returned an unsuccessful status code
         response.raise_for_status()
-        
+
         # Define the complete path including the file name
         complete_save_path = os.path.join(save_path, file.replace("/","_"))
-        
+
         # Open the specified file path in binary write mode and save the content
         if os.path.exists(complete_save_path):
             print(f"File already exists at {complete_save_path}")
@@ -46,10 +45,10 @@ def download_and_unzip_file(file, save_path):
             with open(complete_save_path, 'wb') as file:
                 file.write(response.content)
             print(f"File successfully downloaded and saved to {complete_save_path}")
-        
+
         # Define the extraction path
         extract_path = save_path
-        
+
         # Check if the zip file has already been unzipped
         if os.path.exists(extract_path):
             non_zip_files_exist = any(
@@ -59,7 +58,7 @@ def download_and_unzip_file(file, save_path):
             if non_zip_files_exist:
                 print(f"Files already extracted to {extract_path}")
                 return
-            
+
         # Check if the file is a zip file
         if zipfile.is_zipfile(complete_save_path):
             with zipfile.ZipFile(complete_save_path, 'r') as zip_ref:
@@ -77,7 +76,7 @@ def download_and_unzip_file(file, save_path):
 for file in asc_files:
     file_name = asc_file_dict[file]
     folder_name = file_name[:-4]
-    
+
     # Create year object
     match = year_pattern.search(file_name)
     if match:
@@ -87,7 +86,7 @@ for file in asc_files:
             year = '20' + year
         year = int(year)
     print(year)
-    
+
     save_path = directory + fr'\Inputs\ASC\{year}\{folder_name}'
     os.makedirs(save_path, exist_ok=True)
     download_and_unzip_file(file_name, save_path)
@@ -227,8 +226,7 @@ for file in asc_files:
             combined_asc = pd.concat([combined_asc, processed_df], ignore_index=True)
                 
         else:
-            print("Date range of file unclassified!")
-            time.sleep(100)
+            raise InvalidDateRange(f"Date range of file unclassified '{file_name}', year: '{year}'!")
 
 # Convert to NP datetime format
 combined_asc['EFF_DATE'] = combined_asc['EFF_DATE']

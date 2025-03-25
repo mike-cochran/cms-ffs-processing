@@ -1,16 +1,15 @@
 ## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS ASP FILES AND COMBINE THEM INTO ONE FILE ##
 
 import pandas as pd
-import numpy as np
 import requests
 import zipfile
 import os
 import glob
 import re
-import time
 
 from _process_all_cms import split_rates
-from dicts.asp_dicts import asp_file_dict
+from Dicts.asp_dicts import asp_file_dict
+from custom_exceptions import InvalidMonthError, InvalidDateRange
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
@@ -31,7 +30,7 @@ def download_and_unzip_file(file, save_path):
             response = requests.get('https://www.cms.gov/files/zip/' + file)
         else:
             response = requests.get('https://www.cms.gov/Medicare/Medicare-Fee-for-Service-Part-B-Drugs/McrPartBDrugAvgSalesPrice/downloads/' + file + '?agree=yes&next=Accept')
-            
+
         # Raise an HTTPError if the HTTP request returned an unsuccessful status code
         response.raise_for_status()
 
@@ -76,7 +75,7 @@ def download_and_unzip_file(file, save_path):
 for file in asp_files:
     file_name = asp_file_dict[file]
     folder_name = file_name[:-4].replace("/","_")
-    
+
     # Create year object
     match = year_pattern.search(file_name)
     if match:
@@ -86,7 +85,7 @@ for file in asp_files:
             year = '20' + year
         year = int(year)
     print(year)
-    
+
     save_path = directory + fr'\Inputs\ASP\{year}\{folder_name}'
     os.makedirs(save_path, exist_ok=True)
     download_and_unzip_file(file_name, save_path)
@@ -99,7 +98,7 @@ for file in asp_files:
     file_name = asp_file_dict[file]
     print(file_name)
     folder_name = file_name[:-4].replace("/","_")
-    
+
     # Create year object
     match = year_pattern.search(file_name)
     if match:
@@ -108,21 +107,20 @@ for file in asp_files:
             # Assuming the years are in the 2000s, so '05' -> '2005'
             year = '20' + year
         year = int(year)
-    
+
     # Get Excel file name
     if year > 2007:
         file = glob.glob(directory + fr'\Inputs\ASP\{year}\{folder_name}\*.csv')
     else:
         file = glob.glob(directory + fr'\Inputs\ASP\{year}\{folder_name}\*HCPCS*.xls')
-        
+
     # Create month object
     if "jan" in file[0].lower(): month = 1
     elif "apr" in file[0].lower(): month = 4
     elif "jul" in file[0].lower(): month = 7
     elif "oct" in file[0].lower(): month = 10
     else:
-        print("No valid month found in file name!")
-        time.sleep(100)
+        raise InvalidMonthError(f"No valid month found in file name '{file_name}'!")
     yr_month = year*100 + month
     print(yr_month)
     
@@ -142,8 +140,7 @@ for file in asp_files:
     elif yr_month == 200501:
         asp_file = pd.read_excel(file[0], skiprows=11, engine='xlrd')
     else:
-        print("Date range of file unclassified!")
-        time.sleep(100)
+        raise InvalidDateRange(f"Date range of file unclassified '{file_name}', yr_mth: '{yr_month}'!")
 
     # Remove whitespace in column names
     asp_file.columns = asp_file.columns.str.replace(' ','')

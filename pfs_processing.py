@@ -1,23 +1,22 @@
 ## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS PFS FILES AND COMBINE THEM INTO ONE FILE
 
 import pandas as pd
-import numpy as np
 import requests
 import zipfile
 import os
 import glob
 import re
-import time
 
-from dicts.pfs_dicts import state_loc
-from dicts.pfs_dicts import pfs_file_dict
+from Dicts.pfs_dicts import state_loc
+from Dicts.pfs_dicts import pfs_file_dict
+from custom_exceptions import InvalidMonthError
 
 # SELECT STATES AUTOMATICALLY INCLUDES NATIONAL GEO
-states = ['']
+states = ['WA']
 
 # SELECT SPECIFIC GEOS WITHIN STATES
 # localities = ['ARIZONA','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES/ORANGE CNTY)','RIVERSIDE-SAN BERNARDINO-ONTARIO','SAN DIEGO-CHULA VISTA-CARLSBAD','SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)','COLORADO','NEW MEXICO','NEVADA','REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
-localities = ['']
+localities = ['SEATTLE (KING CNTY)','REST OF WASHINGTON']
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
@@ -169,9 +168,7 @@ for file in pfs_files:
         month_mapping = {'a': 1, 'b': 4, 'c': 7, 'd': 10, 'e': 10, 'm': 3}
         month = month_mapping[match.group(1)]
     else:
-        print("No valid month found in file name!")
-        time.sleep(100)
-        month = None  # Set a default or handle this case as needed
+        raise InvalidMonthError(f"No valid month found in file name '{file_name}'!")
     yr_month = year*100 + month
     print(yr_month)
     

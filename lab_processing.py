@@ -1,16 +1,14 @@
 ## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS LAB FILES AND COMBINE THEM INTO ONE FILE ##
 
 import pandas as pd
-import numpy as np
 import requests
 import zipfile
 import os
 import glob
 import re
-import time
 
 from _process_all_cms import split_rates
-from dicts.lab_dicts import lab_file_dict
+from Dicts.lab_dicts import lab_file_dict
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()
