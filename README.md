@@ -8,7 +8,6 @@ The code this set up to download and process the five different FFS rate schedul
   5. Ambulatory Surgical Center (ASC) schedule
 
 ## Outstanding work
-  1. Clean up file lists and replace with dictionaries
-  2. Look into making individual processing scripts into functions
-  3. Add DME PEN processing
-  4. Process ASC files pre-2006
+  1. Add DME PEN processing
+  2. Homogenize more functions across schedules
+  3. Process ASC files pre-2006
