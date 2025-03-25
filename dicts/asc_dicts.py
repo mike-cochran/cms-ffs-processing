@@ -1,10 +1,10 @@
 
 # Dictionary for file names as specified on the CMS website
-asc_file_dict = {'2001': 'ascpuf01.zip',
-                 '2002': 'ascpuf2002.zip',
-                 '2003': 'ascpuf2003.zip',
-                 '2004': 'ascpuf2004.zip',
-                 '2005': 'ascpuf2005.zip',
+asc_file_dict = {'2001': 'ascpuf01.zip',  # Data yet to be incorporated into processing beyond downloading and unzipping
+                 '2002': 'ascpuf2002.zip',  # Data yet to be incorporated into processing beyond downloading and unzipping
+                 '2003': 'ascpuf2003.zip',  # Data yet to be incorporated into processing beyond downloading and unzipping
+                 '2004': 'ascpuf2004.zip',  # Data yet to be incorporated into processing beyond downloading and unzipping
+                 '2005': 'ascpuf2005.zip',  # Data yet to be incorporated into processing beyond downloading and unzipping
                  '2006': 'ascpuf2006.zip',
                  '2007': '07asc_hcpcs.zip',
                  '2008': '08ASC.zip',

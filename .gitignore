@@ -10,3 +10,4 @@
 *.pyc
 dicts/__pycache__/asp_dicts.cpython-312.pyc
 dicts/__pycache__/pfs_dicts.cpython-312.pyc
+*.pyc

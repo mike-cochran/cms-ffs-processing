@@ -1,6 +1,54 @@
 # Set up libraries
 import os
 
+# Import functions for processing
+from pfs_processing import download_and_unzip_pfs, clean_and_combine_pfs
+from asp_processing import download_and_unzip_asp, clean_and_combine_asp
+from lab_processing import download_and_unzip_lab, clean_and_combine_lab
+from dme_processing import download_and_unzip_dme, clean_and_combine_dme
+from asc_processing import download_and_unzip_asc, clean_and_combine_asc
+from combine_data import combine
+
+######################################
+# GEOGRAPHY INCLUSION SPECIFICATION #
+######################################
+
+# SELECT STATES AUTOMATICALLY INCLUDES NATIONAL GEO FOR PFS
+pfs_states = ['WA']
+
+# SELECT SPECIFIC GEOS WITHIN STATES
+# localities = ['ARIZONA','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES/ORANGE CNTY)','RIVERSIDE-SAN BERNARDINO-ONTARIO','SAN DIEGO-CHULA VISTA-CARLSBAD','SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)','COLORADO','NEW MEXICO','NEVADA','REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
+pfs_localities = ['SEATTLE (KING CNTY)','REST OF WASHINGTON']
+
+# SELECT DME GEOGRAPHIES TO INCLUDE IN OUTPUT FILE; pre-2016 geographies do not have separate rates for NR and R
+dme_geos = ['WA (NR)']
+
+######################################
+# FILE INCLUSION SPECIFICATION #
+######################################
+
+# List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
+# There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
+# If a previous rate schedule to a revision is desired, use the format YYYYQ_p[1-9]
+pfs_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
+
+# List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
+asp_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
+
+# List CLab schedules to include. Files are annual starting in 2008 (format is YYYY)
+# and quarterly starting at 2018Q1 (format is YYYYQ).
+lab_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
+
+# List DME schedules to include. Files are quarterly starting at 1998Q1. Format is YYYYQ.
+# There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
+# If a previous rate schedule to a revision is desired, use the format YYYYQ_[1-9]
+dme_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
+
+# List ASC schedules to include. Files are annual starting in 2001 (format is YYYY)
+# and quarterly starting at 2018Q1 (format is YYYYQ).
+asc_files = ['2018Q1', '2019Q1', '2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1']
+
+
 # Set current working directory to the directory containing the scripts being executed
 os.chdir(os.path.dirname(os.path.abspath(__file__)))
 
@@ -11,100 +59,27 @@ print(directory)
 # Create "Outputs" folder
 os.makedirs(os.path.join(directory,'Outputs'), exist_ok=True)
 
-# Import functions
-from combine_data import combine
+######################################
+# DOWNLOAD DATA FROM CMS WEBSITE #
+######################################
 
-# Function to create standard add on columns
-def add_std_columns(df):
-    df.insert(0, 'YEAR', year)
-    df.insert(1, 'EFF_DATE', eff_date)
-    df['FILE_NAME'] = os.path.basename(file_name)
-    return df
+download_and_unzip_pfs(pfs_files)
+download_and_unzip_asp(asp_files)
+download_and_unzip_lab(lab_files)
+download_and_unzip_dme(dme_files)
+download_and_unzip_asc(asc_files)
 
-def split_rates(df):
-    df['NF RATE'] = df['RATE']
-    df['F RATE'] = df['RATE']
-    df.drop(columns=['RATE'], inplace=True)
-    return df
+# with open(os.path.join(directory, r'pfs_processing.py')) as file:
+#     exec(file.read())
 
-# TODO: complete function below
-# Function to download and unzip a file
-# def download_and_unzip_file(file, save_path, year, new_url_year, base_url, new_accept, old_accept):
-#     """
-#     Downloads and unzips a file from the specified URL.
-#
-#     Parameters:
-#     - file: The name of the file to download.
-#     - save_path: The directory to save the file.
-#     - year: The year to determine the URL structure.
-#     - base_url: The base URL for the download.
-#     - new_url_year: Year after which the URL changes.
-#     - new_accept: Whether the new URL requires the '?agree=yes&next=Accept' suffix.
-#     - old_accept: Whether the old URL requires the '?agree=yes&next=Accept' suffix.
-#     """
-#     try:
-#         # Construct the URL based on the year and conditional logic
-#         if year >= new_url_year:
-#             if new_accept:
-#                 url = 'https://www.cms.gov/files/zip/' + file + '?agree=yes&next=Accept'
-#             else:
-#                 url = 'https://www.cms.gov/files/zip/' + file
-#         else:
-#             if old_accept and file != 'rvu12b-.zip':  # file != 'rvu12b-.zip' meant to deal with one-off PFS file
-#                 url = base_url + file + '?agree=yes&next=Accept'
-#             else:
-#                 url = base_url + file
-#
-#         # Send the HTTP request to download the file
-#         print(url)
-#         response = requests.get(url)
-#         response.raise_for_status()
-#         # Define the complete path including the file name
-#         complete_save_path = os.path.join(save_path, file.replace("/","_"))
-#
-#         # Open the specified file path in binary write mode and save the content
-#         if os.path.exists(complete_save_path):
-#             print(f"File already exists at {complete_save_path}")
-#         else:
-#             with open(complete_save_path, 'wb') as file:
-#                 file.write(response.content)
-#             print(f"File successfully downloaded and saved to {complete_save_path}")
-#
-#         # Define the extraction path
-#         extract_path = save_path
-#         # Check if the zip file has already been unzipped
-#         if os.path.exists(extract_path):
-#             non_zip_files_exist = any(
-#                 entry for entry in os.scandir(extract_path)
-#                 if entry.is_file() and not entry.name.endswith('.zip')
-#             )
-#             if non_zip_files_exist:
-#                 print(f"Files already extracted to {extract_path}")
-#                 return
-#
-#         # Check if the file is a zip file
-#         if zipfile.is_zipfile(complete_save_path):
-#             with zipfile.ZipFile(complete_save_path, 'r') as zip_ref:
-#                 zip_ref.extractall(extract_path)
-#                 print(f"File successfully unzipped to {extract_path}")
-#         else:
-#             print(f"{complete_save_path} is not a zip file")
-#
-#     except requests.exceptions.HTTPError as http_err:
-#         print(f"HTTP error occurred: {http_err}")
-#     except Exception as err:
-#         print(f"An error occurred: {err}")
-
-with open(os.path.join(directory, r'pfs_processing.py')) as file:
-    exec(file.read())
-with open(os.path.join(directory, r'asp_processing.py')) as file:
-    exec(file.read())
-with open(os.path.join(directory, r'lab_processing.py')) as file:
-    exec(file.read())
-with open(os.path.join(directory, r'dme_processing.py')) as file:
-    exec(file.read())
-with open(os.path.join(directory, r'asc_processing.py')) as file:
-    exec(file.read())
+######################################
+# PROCESS UNZIPPED DATA #
+######################################
+combined_pfs = clean_and_combine_pfs(pfs_files, pfs_states, pfs_localities)
+combined_asp = clean_and_combine_asp(asp_files)
+combined_lab = clean_and_combine_lab(lab_files)
+combined_dme = clean_and_combine_dme(dme_files, dme_geos)
+combined_asc = clean_and_combine_asc(asc_files)
 
 combine(directory, combined_pfs=combined_pfs, combined_asp=combined_asp, combined_lab=combined_lab, combined_dme=combined_dme, combined_asc=combined_asc)
     
