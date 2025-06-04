@@ -30,7 +30,7 @@ def combine(dir, combined_pfs=None, combined_asp=None, combined_lab=None, combin
     
     # Check if no dfs to combine
     if not dfs_to_combine:
-        print('No vauid dataframes provided. Skipping combination.')
+        print('No valid dataframes provided. Skipping combination.')
         return
 
     combined_cms = pd.concat(dfs_to_combine, ignore_index=True)
