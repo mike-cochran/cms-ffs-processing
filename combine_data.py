@@ -1,4 +1,4 @@
-## SCRIPT TO DOWNLOAD AND PROCESS ALL CMS ASC FILES AND COMBINE THEM INTO ONE FILE ##
+## Script to combine all CMS schedule data into one file ##
 
 import pandas as pd
 import os
