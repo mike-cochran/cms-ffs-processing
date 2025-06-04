@@ -8,7 +8,7 @@ import glob
 import re
 
 from homogenized_functions import split_rates
-from Dicts.asc_dicts import asc_file_dict
+from dicts.asc_dicts import asc_file_dict
 from custom_exceptions import InvalidDateRange
 
 # Get current working directory from parentfolder of folder containing scripts

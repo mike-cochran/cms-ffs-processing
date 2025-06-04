@@ -32,9 +32,18 @@
   "keyToString": {
     "Python.Runall.executor": "Run",
     "Python._process_all_cms.executor": "Run",
+    "Python.asc_processing.executor": "Run",
+    "Python.asp_processing.executor": "Run",
+    "Python.dme_processing.executor": "Run",
+    "Python.scratch.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "last_opened_file_path": "C:/Users/mcochr11/Documents/GitHub/cms-ffs-processing",
     "settings.editor.selected.configurable": "preferences.keymap"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "Python"
+    ]
   }
 }]]></component>
   <component name="SharedIndexes">

@@ -7,8 +7,8 @@ import os
 import glob
 import re
 
-from Dicts.pfs_dicts import state_loc
-from Dicts.pfs_dicts import pfs_file_dict
+from dicts.pfs_dicts import state_loc
+from dicts.pfs_dicts import pfs_file_dict
 from custom_exceptions import InvalidMonthError
 
 # Get current working directory from parentfolder of folder containing scripts

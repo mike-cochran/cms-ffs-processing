@@ -8,7 +8,7 @@ import glob
 import re
 
 from homogenized_functions import split_rates
-from Dicts.lab_dicts import lab_file_dict
+from dicts.lab_dicts import lab_file_dict
 
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.getcwd()

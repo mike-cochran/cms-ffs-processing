@@ -10,7 +10,7 @@ import glob
 import re
 
 from homogenized_functions import split_rates
-from Dicts.dme_dicts import dme_file_dict
+from dicts.dme_dicts import dme_file_dict
 
 # TODO: ADD DME PEN PROCESSING. SCRIPT ONLY COVERS DME POS
 

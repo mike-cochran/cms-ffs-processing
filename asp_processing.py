@@ -8,7 +8,7 @@ import glob
 import re
 
 from homogenized_functions import split_rates
-from Dicts.asp_dicts import asp_file_dict
+from dicts.asp_dicts import asp_file_dict
 from custom_exceptions import InvalidMonthError, InvalidDateRange
 
 # Get current working directory from parentfolder of folder containing scripts
