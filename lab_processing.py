@@ -81,7 +81,7 @@ def download_and_unzip_lab(file_list):
             print(f"An error occurred: {err}")
 
 
-def clean_and_combine_lab(file_list):
+def clean_and_combine_lab(file_list, geo_list):
 
     # Create empty dataframe for appending
     combined_lab = pd.DataFrame()
@@ -142,6 +142,9 @@ def clean_and_combine_lab(file_list):
             # Create rate column for each geography
             cols = lab_file.columns.to_list()
             lab_file = pd.melt(lab_file, id_vars=['HCPCS','Modifier','SHORTDESC'], value_vars=cols[4:], var_name = 'GEOGRAPHY', value_name = 'RATE')
+
+            # Limit to relevant geographies
+            lab_file = lab_file[lab_file['GEOGRAPHY'].isin(geo_list)]
 
             # Create YEAR column
             lab_file.insert(0,'YEAR',year)

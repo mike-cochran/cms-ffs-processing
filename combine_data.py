@@ -6,7 +6,8 @@ import os
 # Get current working directory from parentfolder of folder containing scripts
 directory = os.path.dirname(os.getcwd())
 
-def combine(dir, combined_pfs=None, combined_asp=None, combined_lab=None, combined_dme=None, combined_asc=None):
+def combine(dir, combined_pfs=None, combined_asp=None, combined_lab=None,
+            combined_dmepos=None, combined_dmepen=None, combined_asc=None):
     
     """Combines the CMS data into a single file and outputs it
     
@@ -15,7 +16,8 @@ def combine(dir, combined_pfs=None, combined_asp=None, combined_lab=None, combin
     - combined_pfs (DataFrame, optional): CMS PFS data
     - combined_asp (DataFrame, optional): CMS ASP data
     - combined_lab (DataFrame, optional): CMS LAB data
-    - combined_dme (DataFrame, optional): CMS DME data
+    - combined_dmepos (DataFrame, optional): CMS DMEPOS data
+    - combined_dmepen (DataFrame, optional): CMS DMEPEN data
     - combined_asc (DataFrame, optional): CMS ASC data
 
     Outputs:
@@ -26,7 +28,7 @@ def combine(dir, combined_pfs=None, combined_asp=None, combined_lab=None, combin
     combined_cms = pd.DataFrame()
     
     # Create list of dataframes for combining
-    dfs_to_combine = [df for df in [combined_pfs, combined_asp, combined_lab, combined_dme, combined_asc] if df is not None and not df.empty]
+    dfs_to_combine = [df for df in [combined_pfs, combined_asp, combined_lab, combined_dmepos, combined_dmepen, combined_asc] if df is not None and not df.empty]
     
     # Check if no dfs to combine
     if not dfs_to_combine:

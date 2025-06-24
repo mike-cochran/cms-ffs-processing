@@ -101,7 +101,7 @@ def download_and_unzip_dme(file_list):
         except Exception as err:
             print(f"An error occurred: {err}")
 
-def clean_and_combine_dme(file_list, geo_list):
+def clean_and_combine_dmepos(file_list, geo_list):
 
     # Create empty dataframe for appending
     combined_dme = pd.DataFrame()
@@ -206,7 +206,120 @@ def clean_and_combine_dme(file_list, geo_list):
     split_rates(combined_dme)
 
     # Save combined reults
-    combined_dme.to_csv(directory + r'\Outputs\Combined DME.csv', index=False)
+    combined_dme.to_csv(directory + r'\Outputs\Combined DMEPOS.csv', index=False)
+    print(combined_dme)
+
+    return combined_dme
+
+def clean_and_combine_dmepen(file_list, geo_list):
+
+    # Create empty dataframe for appending
+    combined_dme = pd.DataFrame()
+
+    dme_file_ct = {2002: 0, 2003: 0, 2004: 0, 2005: 0, 2006: 0, 2007: 0, 2008: 0,
+                   2009: 0, 2010: 0, 2011: 0, 2012: 0, 2013: 0, 2014: 0, 2015: 0}
+
+    # Process each file and combine
+    for file in file_list:
+        file_name = dme_file_dict[file]
+        print(file_name)
+        folder_name = file_name[:-4]
+
+        # Create year object
+        match = year_pattern.search(file_name)
+        if match:
+            year = match.group(0)
+            if len(year) == 2:
+                year = '20' + year
+            year = int(year)
+        print(year)
+
+        # Prior to 2016 only annual set of rates after any revisions so only pull in one file for each year
+        if year <= 2015:
+            if dme_file_ct[year] == 1:
+                continue  # Skip file if a PEN set of rates have already been read in for that year
+            dme_file_ct[year] += 1
+
+        # Get PEN file name and check if it exists
+        file = glob.glob(directory + fr'\Inputs\DME\{year}\{folder_name}\*pen*.csv')
+        if len(file) == 0:
+            print(f"PEN file not found for {folder_name}")
+            continue
+
+        # Get the effective date of the file
+        csv_file_name = os.path.basename(file[0])
+        if year <= 2015:  # Only annual (January) updates to PEN prior to 2016 despite rate files published each release
+            eff_date = "January " + str(year)
+        else:
+            with contextlib.redirect_stdout(io.StringIO()):
+                with open(file[0]) as preview:
+                    for i in range(1):
+                        next(preview)
+                    eff_date = preview.readline().split(',')[0]
+            eff_date = re.search(r'\b\w+\s\d{4}\b', eff_date).group()
+        eff_date = pd.to_datetime(eff_date, format='%B %Y')
+        print(eff_date)
+
+        # Read in CSV file particular to the format of that year
+        if year == 2005:
+            dme_file = pd.read_csv(file[0], skiprows=6, encoding='cp1252')
+        elif year <= 2014:
+            dme_file = pd.read_csv(file[0], skiprows=3, encoding='cp1252')
+        elif year == 2015:
+            dme_file = pd.read_csv(file[0], skiprows=1, encoding='cp1252')
+        else:
+            dme_file = pd.read_csv(file[0], skiprows=4, encoding='cp1252')
+        print(file[0])
+
+        # Create mod column mapping and standardize mod column names
+        dme_file.columns = dme_file.columns.str.upper()  # Avoid case issues with column names
+        mod_col_dict = {'MODIFIER 1': 'MOD', 'MODIFIER 2': 'MOD2'}
+        dme_file = dme_file.rename(columns={col: mod_col_dict[col] for col in dme_file.columns if col in mod_col_dict})
+
+        # Combine both mod columns into a single column
+        dme_file['MOD'] = dme_file['MOD'] + dme_file['MOD2']
+
+        # Remove extra columns
+        dme_file = dme_file.drop(columns=['MOD2'])
+
+        # Rename and reorder columns
+        dme_file = dme_file.rename(columns=lambda col: 'SHORTDESC' if col[:4] in ['DESC','SHOR'] else col)
+        col = dme_file.pop('SHORTDESC')
+        dme_file.insert(2,'SHORTDESC',col)
+
+        if year <= 2015:
+            dme_file = dme_file.rename(columns=lambda col: 'RATE' if 'FEE' in col else col)
+        else:
+            # Create rate column for each geography
+            cols = dme_file.columns.to_list()
+            dme_file = pd.melt(dme_file, id_vars=['HCPCS','MOD','SHORTDESC'], value_vars=cols[4:], var_name = 'GEOGRAPHY', value_name = 'RATE')
+
+            # Limit to relevant geographies
+            if year >= 2024:
+                geo_list = [geo.replace(' ', '') for geo in geo_list]  # Geos in PEN do not have spaces so need to remove
+            dme_file = dme_file[dme_file['GEOGRAPHY'].isin(geo_list)]
+
+        # Create YEAR and EFF_DATE column
+        if year != 2015: dme_file.insert(0,'YEAR',year)
+        dme_file.insert(1,'EFF_DATE',eff_date)
+
+        # Drop blank rows based on missing CPT
+        dme_file = dme_file.dropna(subset=['HCPCS'])
+
+        # Create column for file name
+        dme_file['FILE_NAME'] = csv_file_name
+
+        # Create combined ASP df
+        combined_dme = pd.concat([combined_dme, dme_file], ignore_index=True)
+
+    # Convert to NP datetime format
+    combined_dme['EFF_DATE'] = combined_dme['EFF_DATE']
+    combined_dme.insert(0, 'CMS SCHEDULE', '4. DME')
+
+    split_rates(combined_dme)
+
+    # Save combined reults
+    combined_dme.to_csv(directory + r'\Outputs\Combined DMEPEN.csv', index=False)
     print(combined_dme)
 
     return combined_dme
