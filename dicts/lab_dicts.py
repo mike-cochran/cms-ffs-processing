@@ -37,5 +37,7 @@ lab_file_dict = {'2008': '08CLAB-b.zip',
                  '2024Q2': '24CLABQ2.zip',
                  '2024Q3': '24CLABQ3.zip',
                  '2024Q4': '24CLABQ4.zip',
-                 '2025Q1': '25CLABQ1.zip'
+                 '2025Q1': '25CLABQ1.zip',
+                 '2025Q2': '25CLABQ2.zip',
+                 '2025Q3': '25CLABQ3.zip'
                 }

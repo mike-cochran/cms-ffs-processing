@@ -46,5 +46,7 @@ asc_file_dict = {'2001': 'ascpuf01.zip',  # Data yet to be incorporated into pro
                  '2024Q2': 'april-2024-asc-approved-hcpcs-code-and-payment-rates.zip',
                  '2024Q3': 'july-2024-asc-approved-hcpcs-code-and-payment-rates.zip',
                  '2024Q4': 'october-2024-asc-approved-hcpcs-code-and-payment-rates-updated-09/24/2024.zip',
-                 '2025Q1': 'january-2025-asc-approved-hcpcs-code-and-payment-rates.zip'
+                 '2025Q1': 'january-2025-asc-approved-hcpcs-code-and-payment-rates.zip',
+                 '2025Q2': 'april-2025-asc-approved-hcpcs-code-and-payment-rates-updated-04/07/2025.zip',
+                 '2025Q3': 'july-2025-asc-addenda.zip'
                 }
