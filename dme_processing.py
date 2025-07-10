@@ -27,7 +27,7 @@ def download_and_unzip_dme(file_list):
 
     for file in file_list:
         file_name = dme_file_dict[file]
-        folder_name = file_name[:-4]
+        folder_name = file_name[:-4].replace("/", "_")
 
         # Create year object
         match = year_pattern.search(file_name)
@@ -54,7 +54,7 @@ def download_and_unzip_dme(file_list):
             response.raise_for_status()
 
             # Define the complete path including the file name
-            complete_save_path = os.path.join(save_path, file_name)
+            complete_save_path = os.path.join(save_path, file_name.replace("/","_"))
 
             # Open the specified file path in binary write mode and save the content
             if os.path.exists(complete_save_path):
@@ -109,8 +109,9 @@ def clean_and_combine_dmepos(file_list, geo_list):
     # Process each file and combine
     for file in file_list:
         file_name = dme_file_dict[file]
-        print(file_name)
+        file_name = file_name.replace("/","_")
         folder_name = file_name[:-4]
+        print(file_name)
 
         # Create year object
         match = year_pattern.search(file_name)
@@ -222,8 +223,9 @@ def clean_and_combine_dmepen(file_list, geo_list):
     # Process each file and combine
     for file in file_list:
         file_name = dme_file_dict[file]
-        print(file_name)
+        file_name = file_name.replace("/","_")
         folder_name = file_name[:-4]
+        print(file_name)
 
         # Create year object
         match = year_pattern.search(file_name)
