@@ -119,13 +119,13 @@ def clean_and_combine_pfs(file_list, states, localities):
             year = int(year)
 
         # Get Excel file name
-        rvu_file_name = glob.glob(directory + fr'\Inputs\PFS\{year}\{folder_name}\*RVU*.csv')
+        rvu_file_name = glob.glob(directory + fr'\Inputs\PFS\{year}\{folder_name}\*RVU*.csv')[0]
         gpci_file_name = glob.glob(directory + fr'\Inputs\PFS\{year}\{folder_name}\*GPCI*.csv')
         print(rvu_file_name)
         print(gpci_file_name)
 
         # Create month object
-        match = re.search(r'\b\w+\d{2}_?([a-z])',rvu_file_name[0].lower())
+        match = re.search(r'\b\w+\d{2}_?([a-z])',file_name.lower())
         if match:
             # Map the matched character to the corresponding month
             month_mapping = {'a': 1, 'b': 4, 'c': 7, 'd': 10, 'e': 10, 'm': 3}
@@ -139,7 +139,7 @@ def clean_and_combine_pfs(file_list, states, localities):
         head_start = [5,6,7,8,9]
         if yr_month <= 200801: head_start = [4,5,6,7,8]
         if year <= 2005: head_start = [4,5,6,7]
-        rvu = pd.read_csv(rvu_file_name[0], header=head_start, encoding='cp1252')
+        rvu = pd.read_csv(rvu_file_name, header=head_start, encoding='cp1252', low_memory=False)
 
         # Function to concatenate headers while omitting "Unnamed"
         def concatenate_headers(header_tuple):
@@ -168,6 +168,7 @@ def clean_and_combine_pfs(file_list, states, localities):
 
         # Drop unnecessary columns
         if year == 2011 and file_name != 'rvu11a.zip': gpci.drop(gpci.columns[[3,4,5]], axis=1, inplace=True)
+        if year == 2026: gpci.drop(gpci.columns[[4]], axis=1, inplace=True)
         else: gpci.dropna(axis=1, how='all', inplace=True)
         gpci = gpci.iloc[:,-4:]
 
@@ -230,8 +231,8 @@ def clean_and_combine_pfs(file_list, states, localities):
     # Create combined RVU columns
     combined_pfs['NF RVUS'] = combined_pfs['WORK RVU']*combined_pfs['PW GPCI'] + combined_pfs['NON-FAC PE RVU']*combined_pfs['PE GPCI'] + combined_pfs['MP RVU']*combined_pfs['MP GPCI']
     combined_pfs['F RVUS'] = combined_pfs['WORK RVU']*combined_pfs['PW GPCI'] + combined_pfs['FACILITY PE RVU']*combined_pfs['PE GPCI'] + combined_pfs['MP RVU']*combined_pfs['MP GPCI']
-    combined_pfs['NF RATE'] = combined_pfs['NF RVUS']*combined_pfs['CONV FACTOR']
-    combined_pfs['F RATE'] = combined_pfs['F RVUS']*combined_pfs['CONV FACTOR']
+    combined_pfs['NF RATE'] = round(combined_pfs['NF RVUS']*combined_pfs['CONV FACTOR'], 2)
+    combined_pfs['F RATE'] = round(combined_pfs['F RVUS']*combined_pfs['CONV FACTOR'], 2)
 
     # Save combined reults
     combined_pfs.to_csv(directory + r'\Outputs\Combined PFS.csv', index=False)
