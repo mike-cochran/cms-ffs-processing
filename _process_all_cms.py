@@ -14,27 +14,52 @@ from combine_data import combine
 # Set fee schedule downloading and processing you wish to run
 schedules = {
                 'pfs': True,
-                'asp': False,
-                'clab': False,
-                'dme': False,
-                'asc': False,}
+                'asp': True,
+                'clab': True,
+                'dme': True,
+                'asc': True,
+            }
 
 ######################################
 # GEOGRAPHY INCLUSION SPECIFICATION #
 ######################################
 
 # SELECT STATES AUTOMATICALLY INCLUDES NATIONAL GEO FOR PFS
-pfs_states = ['OR', 'WA']
+pfs_states = ['WA']
+# pfs_states = ['AZ', 'CA', 'CO', 'NM', 'NV', 'OR', 'UT', 'WA']
 
 # SELECT SPECIFIC GEOS WITHIN STATES
-# ['ARIZONA','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)','LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES/ORANGE CNTY)','RIVERSIDE-SAN BERNARDINO-ONTARIO','SAN DIEGO-CHULA VISTA-CARLSBAD','SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)','COLORADO','NEW MEXICO','NEVADA','REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
-pfs_localities = ['REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
+# pfs_localities = [
+#                     'ARIZONA',
+#                     'LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES CNTY)',
+#                     'LOS ANGELES-LONG BEACH-ANAHEIM (ORANGE CNTY)',
+#                     'LOS ANGELES-LONG BEACH-ANAHEIM (LOS ANGELES/ORANGE CNTY)',
+#                     'RIVERSIDE-SAN BERNARDINO-ONTARIO',
+#                     'SAN DIEGO-CHULA VISTA-CARLSBAD',
+#                     'SAN JOSE-SUNNYVALE-SANTA CLARA (SAN BENITO CNTY)',
+#                     'SAN JOSE-SUNNYVALE-SANTA CLARA (SANTA CLARA CNTY)',
+#                     'COLORADO',
+#                     'NEW MEXICO',
+#                     'NEVADA',
+#                     'REST OF OREGON',
+#                     'PORTLAND',
+#                     'UTAH',
+#                     'SEATTLE (KING CNTY)',
+#                     'REST OF WASHINGTON'
+#                 ]
+pfs_localities = [
+                    'SEATTLE (KING CNTY)',
+                  'REST OF WASHINGTON'
+                ]
+# pfs_localities = ['REST OF OREGON', 'PORTLAND', 'SEATTLE (KING CNTY)','REST OF WASHINGTON']
 
 # SELECT CLAB GEOGRAPHIES only applies to pre-2018 data
-clab_geos = ['OR', 'WA']
+clab_geos = ['WA']
+# clab_geos = ['AZ', 'CA', 'CO', 'NM', 'NV', 'OR', 'UT', 'WA']
 
 # SELECT DME GEOGRAPHIES TO INCLUDE IN OUTPUT FILE; pre-2016 geographies do not have separate rates for NR and R
-dme_geos = ['OR (NR)', 'WA (NR)']
+dme_geos = ['WA (NR)']
+# dme_geos = ['AZ (NR)', 'CA (NR)', 'CO (NR)', 'NM (NR)', 'NV (NR)', 'OR (NR)', 'UT (NR)', 'WA (NR)']
 
 ######################################
 # FILE INCLUSION SPECIFICATION #
@@ -43,23 +68,23 @@ dme_geos = ['OR (NR)', 'WA (NR)']
 # List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
 # There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
 # If a previous rate schedule to a revision is desired, use the format YYYYQ_p[1-9]
-pfs_files = ['2026Q1']
+pfs_files = ['2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1', '2026Q1']
 
 # List ASP schedules to include. Files are quarterly starting at 2005Q1. Format is YYYYQ.
-asp_files = ['2025Q1']
+asp_files = ['2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1', '2026Q1']
 
 # List CLab schedules to include. Files are annual starting in 2008 (format is YYYY)
 # and quarterly starting at 2018Q1 (format is YYYYQ).
-lab_files = ['2025Q1']
+lab_files = ['2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1', '2026Q1']
 
 # List DME schedules to include. Files are quarterly starting at 1998Q1. Format is YYYYQ.
 # There are a number of revision files. Mostly recently revised file is the default value for that year quarter in dict
 # If a previous rate schedule to a revision is desired, use the format YYYYQ_[1-9]
-dme_files = ['2025Q1']
+dme_files = ['2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1', '2026Q1']
 
 # List ASC schedules to include. Files are annual starting in 2001 (format is YYYY)
 # and quarterly starting at 2018Q1 (format is YYYYQ).
-asc_files = ['2025Q1']
+asc_files = ['2020Q1', '2021Q1', '2022Q1', '2023Q1', '2024Q1', '2025Q1', '2026Q1']
 
 
 # Set current working directory to the directory containing the scripts being executed
@@ -116,4 +141,4 @@ else:
 combine(directory, combined_pfs=combined_pfs, combined_asp=combined_asp, combined_lab=combined_lab,
         combined_dmepos=combined_dmepos, combined_dmepen=combined_dmepen, combined_asc=combined_asc)
 
-print('\nProcessing complete. File is ready!')
+print('\n----------------Processing complete. File is ready!')

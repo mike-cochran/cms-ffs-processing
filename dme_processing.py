@@ -173,7 +173,7 @@ def clean_and_combine_dmepos(file_list, geo_list):
 
         # Combine both mod columns into a single column
         dme_file.columns = dme_file.columns.str.upper()
-        dme_file['MOD'] = dme_file['MOD'] + dme_file['MOD2']
+        dme_file['MOD'] = dme_file['MOD'].str.cat(dme_file['MOD2'], na_rep='')
 
         # Remove extra columns
         dme_file = dme_file.drop(columns=['MOD2','JURIS','CATG','CEILING','FLOOR'])
@@ -298,7 +298,7 @@ def clean_and_combine_dmepen(file_list, geo_list):
 
             # Limit to relevant geographies
             if year >= 2024:
-                geo_list = [geo.replace(' ', '') for geo in geo_list]  # Geos in PEN do not have spaces so need to remove
+                dme_file['GEOGRAPHY'] = dme_file['GEOGRAPHY'].str.replace('(',' (',regex=False)  # Geos in PEN do not have spaces so need to add one in
             dme_file = dme_file[dme_file['GEOGRAPHY'].isin(geo_list)]
 
         # Create YEAR and EFF_DATE column

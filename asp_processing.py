@@ -171,6 +171,9 @@ def clean_and_combine_asp(file_list):
     combined_asp.insert(2,'GEOGRAPHY','NATIONAL')
     combined_asp.insert(0, 'CMS SCHEDULE', '2. ASP')
 
+    # Fill in missing prices with 0; affects A9606 for the past several years
+    combined_asp['RATE'] = combined_asp['RATE'].fillna(0)
+
     split_rates(combined_asp)
 
     # Save combined reults
