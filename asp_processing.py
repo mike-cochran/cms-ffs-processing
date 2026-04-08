@@ -109,7 +109,9 @@ def clean_and_combine_asp(file_list):
             year = int(year)
 
         # Get Excel file name
-        if year > 2007:
+        if year >= 2026:
+            file = glob.glob(directory + fr'\Inputs\ASP\{year}\{folder_name}\*Limit*.csv')
+        elif year > 2007:
             file = glob.glob(directory + fr'\Inputs\ASP\{year}\{folder_name}\*.csv')
         else:
             file = glob.glob(directory + fr'\Inputs\ASP\{year}\{folder_name}\*HCPCS*.xls')

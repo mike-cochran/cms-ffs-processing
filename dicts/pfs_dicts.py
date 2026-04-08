@@ -104,6 +104,7 @@ pfs_file_dict = {'2003Q1': 'rvu03_a.zip',
                  '2025Q3': 'rvu25c-updated-06/05/2025.zip',
                  '2025Q4': 'rvu25d-updated-09/11/2025.zip',
                  '2026Q1': 'rvu26a.zip',
+                 '2026Q2': 'rvu26b-updated-03-10-2026.zip',
                  }
 
 # State and loc dictionary for PFS locality standardization

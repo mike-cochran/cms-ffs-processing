@@ -101,5 +101,6 @@ dme_file_dict = {'1998Q1': 'dme98_d.zip',
                   '2025Q2': 'dme25-b.zip',
                   '2025Q3': 'dme25-c-updated-06/30/2025.zip',
                   '2025Q4': 'dme25-d.zip',
-                  '2026Q1': 'dme26.zip'
+                  '2026Q1': 'dme26.zip',
+                  '2026Q2': 'dme26-b.zip',
                 }
